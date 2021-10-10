@@ -2,7 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+/*
+megcsinaljuk pygameben DE DE csak ha elobb c++ ban (meg brainfckban is egybol), opengl nélkül
+Done:E
 
+jo ohm guys amig Boti meghackeli a githubot es megprobalja feltolteni a cuccot osszeszedhetnenk h mi kell meg a gamebe
+
+Todo: hi:)
+- Enpassant
+- Checkmate system
+°O°
+*/
 public class GameController : MonoBehaviour
 {
     public int turns = 0;

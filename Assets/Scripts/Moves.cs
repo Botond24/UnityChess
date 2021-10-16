@@ -51,6 +51,24 @@ public class Moves : MonoBehaviour
         }
         transform.position = GetClosest(possibleMoves).position - new Vector3(0,0,1);
         gameObject.GetComponent<SpriteRenderer>().size = new Vector2(2,2);
+        if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] - 16)
+        {
+            GameObject leftR =
+                   GameObject.FindGameObjectsWithTag(gameObject.tag)[0].name == "WR" ?
+                   GameObject.FindGameObjectsWithTag(gameObject.tag)[0] :
+                   GameObject.FindGameObjectsWithTag(gameObject.tag)[1];
+            leftR.transform.position += new Vector3(6, 0, 0);
+            everyMove[leftR].Add(BPs.IndexOf(leftR.GetComponent<Moves>().GetClosest(BPs)));
+        }
+        else if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] + 16)
+        {
+            GameObject rightR =
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 2].name == "WR" ?
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 2] :
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 1];
+            rightR.transform.position -= new Vector3(4, 0, 0);
+            everyMove[rightR].Add(BPs.IndexOf(rightR.GetComponent<Moves>().GetClosest(BPs)));
+        }
         if (BPs.IndexOf(GetClosest(BPs)) != Moved[Moved.Count - 1])
         {
             Moved.Add(BPs.IndexOf(GetClosest(BPs)));
@@ -167,7 +185,41 @@ public class Moves : MonoBehaviour
                     }
                     break;
             }
-            if (a.Contains("B"))
+            if (Moved.Count == 1)
+            {
+                GameObject leftR = 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[0].name == "WR" ? 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[0] : 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[1];
+                GameObject rightR = 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 2].name == "WR" ? 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 2] : 
+                    GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 1];
+                if (everyMove[leftR].Count == 1)
+                {
+                    foreach (KeyValuePair<GameObject, List<int>> kvp in everyMove)
+                    {
+                        if (kvp.Value[kvp.Value.Count-1] == i-8 || kvp.Value[kvp.Value.Count - 1] == i -16 || kvp.Value[kvp.Value.Count - 1] ==  i-24)
+                        {
+                            goto right;
+                        }
+                    }
+                    possibleMoves.Add(BPs[i - 16]);
+                }
+                right:
+                    if (everyMove[rightR].Count == 1)
+                    {
+                        foreach (KeyValuePair<GameObject, List<int>> kvp in everyMove)
+                        {
+                            if (kvp.Value[kvp.Value.Count - 1] == i + 8 || kvp.Value[kvp.Value.Count - 1] == i + 16)
+                            {
+                                goto Remove;
+                            }
+                        }
+                        possibleMoves.Add(BPs[i + 16]);
+                    }
+            }
+            /*if (a.Contains("B"))
             {
                 foreach (Transform tr in WhiteTakes)
                 {
@@ -180,7 +232,7 @@ public class Moves : MonoBehaviour
                 {
                     possibleMoves.Remove(tr);
                 }
-            }
+            }*/
 
         }
         else if(a == "BB" || a == "WB")

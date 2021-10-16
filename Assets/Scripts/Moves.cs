@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Moves : MonoBehaviour
 {
+    // Queen move generation, removal has a problem
     private List<string> names = new List<string>() { "TQ", "TB", "TN", "TR" }; //t for temporary
     private Camera Cam;
     private string a; 
@@ -29,7 +30,8 @@ public class Moves : MonoBehaviour
     {
         GetLocations();                         //   -7, +1, +9
         possibleMoves.Clear();                  //   -8,  0, +8
-        GenerateMoves();                        //   -9, -1, +7
+        GetTakes();                             //   -9, -1, +7
+        GenerateMoves();
         foreach (Transform BP in possibleMoves)
         {
             BP.GetComponent<SpriteRenderer>().color = Color.red;
@@ -185,7 +187,28 @@ public class Moves : MonoBehaviour
                     }
                     break;
             }
-            if (Moved.Count == 1)
+            if (a.Contains("B"))
+            {
+                foreach (Transform tr in WhiteTakes)
+                {
+                    if (possibleMoves.Contains(tr))
+                    {
+                        possibleMoves.Remove(tr);
+                    }
+                }
+
+            }
+            else
+            {
+                foreach (Transform tr in BlackTakes)
+                {
+                    if (possibleMoves.Contains(tr))
+                    {
+                        possibleMoves.Remove(tr);
+                    }
+                }
+            }
+                if (Moved.Count == 1)
             {
                 GameObject leftR = 
                     GameObject.FindGameObjectsWithTag(gameObject.tag)[0].name == "WR" ? 
@@ -204,6 +227,13 @@ public class Moves : MonoBehaviour
                             goto right;
                         }
                     }
+                    foreach (Transform take in gameObject.tag == "White" ? BlackTakes : WhiteTakes)
+                    {
+                        if (BPs.IndexOf(take) == i-8 || BPs.IndexOf(take) == i - 16 || BPs.IndexOf(take) == i - 24)
+                        {
+                            goto right;
+                        }
+                    }
                     possibleMoves.Add(BPs[i - 16]);
                 }
                 right:
@@ -216,23 +246,16 @@ public class Moves : MonoBehaviour
                                 goto Remove;
                             }
                         }
-                        possibleMoves.Add(BPs[i + 16]);
+                        foreach (Transform take in gameObject.tag == "White" ? BlackTakes : WhiteTakes)
+                        {
+                            if (BPs.IndexOf(take) == i + 8 || BPs.IndexOf(take) == i + 16)
+                            {
+                                goto Remove;
+                            }
+                        }
+                    possibleMoves.Add(BPs[i + 16]);
                     }
             }
-            /*if (a.Contains("B"))
-            {
-                foreach (Transform tr in WhiteTakes)
-                {
-                    possibleMoves.Remove(tr);
-                }
-
-            }else
-            {
-                foreach (Transform tr in BlackTakes)
-                {
-                    possibleMoves.Remove(tr);
-                }
-            }*/
 
         }
         else if(a == "BB" || a == "WB")
@@ -709,7 +732,7 @@ public class Moves : MonoBehaviour
                 }
             }
         }
-        goto Remove;
+        possibleMoves = RemoveDuplicates(possibleMoves);
         Remove:
             foreach (Transform m in possibleMoves)
             {
@@ -734,21 +757,15 @@ public class Moves : MonoBehaviour
     {
         BlackTakes.Clear();
         WhiteTakes.Clear();
-        foreach (KeyValuePair<GameObject,List<int>> kvp in everyMove)
+        foreach (GameObject OB in GameObject.FindGameObjectsWithTag("Black"))
         {
-            int i = BPs.IndexOf(kvp.Key.GetComponent<Moves>().GetClosest(BPs));
-            if (kvp.Key.name == "BP")
+            int i = BPs.IndexOf(OB.GetComponent<Moves>().GetClosest(BPs));
+            if (!OB.name.Contains("P"))
             {
-                if (i >= 8)
-                {
-                    BlackTakes.Add(BPs[i - 9]);
-                }
-                if (i <=55)
-                {
-                    BlackTakes.Add(BPs[i + 7]);
-                }
+                OB.GetComponent<Moves>().GenerateMoves();
+                BlackTakes.AddRange(OB.GetComponent<Moves>().possibleMoves);
             }
-            else if (kvp.Key.name == "WP")
+            else
             {
                 if (i >= 8)
                 {
@@ -760,21 +777,39 @@ public class Moves : MonoBehaviour
                 }
             }
         }
-        foreach (GameObject OB in GameObject.FindGameObjectsWithTag("Black"))
-        {
-            if (!OB.name.Contains("P"))
-            {
-                BlackTakes.AddRange(OB.GetComponent<Moves>().possibleMoves);
-            }
-        }
         foreach (GameObject OB in GameObject.FindGameObjectsWithTag("White"))
         {
+            int i = BPs.IndexOf(OB.GetComponent<Moves>().GetClosest(BPs));
             if (!OB.name.Contains("P"))
             {
+                OB.GetComponent<Moves>().GenerateMoves();
                 WhiteTakes.AddRange(OB.GetComponent<Moves>().possibleMoves);
+            }
+            else
+            {
+                if (i >= 8)
+                {
+                    WhiteTakes.Add(BPs[i - 7]);
+                }
+                if (i <= 55)
+                {
+                    WhiteTakes.Add(BPs[i + 9]);
+                }
             }
         
         }
+    }
+    List<T> RemoveDuplicates<T>(List<T> l)
+    {
+        List<T> l2 = new List<T>();
+        foreach (T i in l)
+        {
+            if (!l2.Contains(i))
+            {
+                l2.Add(i);
+            }
+        }
+        return l2;
     }
 }
                     //   -14, -6, +2, +10, +18

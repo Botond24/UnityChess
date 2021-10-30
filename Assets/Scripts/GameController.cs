@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     public GameObject IG;
     public int BD;
     public int WD;
-    void Awake()
+    void Start()
     {
         PlayerChange();
         SS = GameObject.Find("Start Screen");

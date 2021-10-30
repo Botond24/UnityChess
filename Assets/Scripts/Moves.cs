@@ -12,6 +12,7 @@ public class Moves : MonoBehaviour
     public Dictionary<GameObject, List<int>> everyMove = new Dictionary<GameObject, List<int>>();
     public List<int> Moved = new List<int>();
     public List<Transform> possibleMoves = new List<Transform>();
+    public List<Transform> TpossibleMoves = new List<Transform>();
     private List<int> BlackLocations = new List<int>();
     private List<int> WhiteLocations = new List<int>();
     private List<Transform> BlackTakes = new List<Transform>();
@@ -23,13 +24,13 @@ public class Moves : MonoBehaviour
         everyMove = GameObject.Find("Pieces").GetComponent<GeneratePieces>().allMoves;
         Moved = everyMove[gameObject];
         Moved.Add(BPs.IndexOf(GetClosest(BPs)));
-        GenerateMoves();
-        GetTakes();
+        /*GenerateMoves();
+        GetTakes();*/
     }
     void OnMouseDown()
-    {
-        GetLocations();                         //   -7, +1, +9
-        possibleMoves.Clear();                  //   -8,  0, +8
+    {                                           //   -7, +1, +9
+        TpossibleMoves.Clear();                  //   -8,  0, +8
+        possibleMoves.Clear();
         GetTakes();                             //   -9, -1, +7
         GenerateMoves();
         foreach (Transform BP in possibleMoves)
@@ -119,71 +120,72 @@ public class Moves : MonoBehaviour
     }
     void GenerateMoves()
     {
+        GetLocations();
         int i = BPs.IndexOf(GetClosest(BPs));
         if (a.Contains("K"))       
         {
             switch (i % 8)
             {
                 case 0:
-                    if (0 <= i && i <= 7)
+                    if (i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i+9]);
-                    } else if (56 <= i && i <= 63){
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i-7]);
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i+9]);
+                    } else if (56 <= i){
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i-7]);
                     } else {
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i-7]);
-                        possibleMoves.Add(BPs[i+9]);
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i-7]);
+                        TpossibleMoves.Add(BPs[i+9]);
                     }
                     break;
                 case 7:
-                    if (0 <= i && i <= 7)
+                    if (i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i-1]);
-                        possibleMoves.Add(BPs[i+7]);
-                    } else if (56 <= i && i <= 63){
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i-9]);
-                        possibleMoves.Add(BPs[i-1]); 
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i-1]);
+                        TpossibleMoves.Add(BPs[i+7]);
+                    } else if (56 <= i){
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i-9]);
+                        TpossibleMoves.Add(BPs[i-1]); 
                     } else {
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i-9]);
-                        possibleMoves.Add(BPs[i-1]);
-                        possibleMoves.Add(BPs[i+7]);
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i-9]);
+                        TpossibleMoves.Add(BPs[i-1]);
+                        TpossibleMoves.Add(BPs[i+7]);
                     }
                     
                     break;
                 default:
-                    if (0 <= i && i <= 7)
+                    if (i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i+9]);
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i-1]);
-                        possibleMoves.Add(BPs[i+7]);
-                    } else if (56 <= i && i <= 63){
-                        possibleMoves.Add(BPs[i-7]);
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i-9]);
-                        possibleMoves.Add(BPs[i-1]);
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i+9]);
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i-1]);
+                        TpossibleMoves.Add(BPs[i+7]);
+                    } else if (56 <= i){
+                        TpossibleMoves.Add(BPs[i-7]);
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i-9]);
+                        TpossibleMoves.Add(BPs[i-1]);
                     } else {
-                        possibleMoves.Add(BPs[i-7]);
-                        possibleMoves.Add(BPs[i+1]);
-                        possibleMoves.Add(BPs[i+9]);
-                        possibleMoves.Add(BPs[i-8]);
-                        possibleMoves.Add(BPs[i+8]);
-                        possibleMoves.Add(BPs[i-9]);
-                        possibleMoves.Add(BPs[i-1]);
-                        possibleMoves.Add(BPs[i+7]);
+                        TpossibleMoves.Add(BPs[i-7]);
+                        TpossibleMoves.Add(BPs[i+1]);
+                        TpossibleMoves.Add(BPs[i+9]);
+                        TpossibleMoves.Add(BPs[i-8]);
+                        TpossibleMoves.Add(BPs[i+8]);
+                        TpossibleMoves.Add(BPs[i-9]);
+                        TpossibleMoves.Add(BPs[i-1]);
+                        TpossibleMoves.Add(BPs[i+7]);
                     }
                     break;
             }
@@ -191,9 +193,9 @@ public class Moves : MonoBehaviour
             {
                 foreach (Transform tr in WhiteTakes)
                 {
-                    if (possibleMoves.Contains(tr))
+                    if (TpossibleMoves.Contains(tr))
                     {
-                        possibleMoves.Remove(tr);
+                        TpossibleMoves.Remove(tr);
                     }
                 }
 
@@ -202,9 +204,9 @@ public class Moves : MonoBehaviour
             {
                 foreach (Transform tr in BlackTakes)
                 {
-                    if (possibleMoves.Contains(tr))
+                    if (TpossibleMoves.Contains(tr))
                     {
-                        possibleMoves.Remove(tr);
+                        TpossibleMoves.Remove(tr);
                     }
                 }
             }
@@ -234,7 +236,7 @@ public class Moves : MonoBehaviour
                             goto right;
                         }
                     }
-                    possibleMoves.Add(BPs[i - 16]);
+                    TpossibleMoves.Add(BPs[i - 16]);
                 }
                 right:
                     if (everyMove[rightR].Count == 1)
@@ -253,7 +255,7 @@ public class Moves : MonoBehaviour
                                 goto Remove;
                             }
                         }
-                    possibleMoves.Add(BPs[i + 16]);
+                    TpossibleMoves.Add(BPs[i + 16]);
                     }
             }
 
@@ -269,7 +271,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -283,7 +285,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -297,7 +299,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -311,7 +313,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -325,152 +327,152 @@ public class Moves : MonoBehaviour
                 case 0:
                     if (0 <= i && i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
                     } else if (8 <= i && i <= 15){
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
                     } else if (56 <= i && i <= 63)
                     {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i-15]);
                     } else if (48 <= i && i <= 55)
                     {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i-15]);
                     } else {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i-15]);
                     }
                     break;
                 case 1:
                     if (0 <= i && i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     } else if (8 <= i && i <= 15){
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     } else if (56 <= i && i <= 63)
                     {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-17]);
                     } else if (48 <= i && i <= 55)
                     {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-17]);
                     } else {
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     }
                     break;
                 case 6:
                     if (0 <= i && i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+17]);
                     } else if (8 <= i && i <= 15){
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+17]);
                     } else if (56 <= i && i <= 63)
                     {
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
                     } else if (48 <= i && i <= 55)
                     {
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i+6]);
                     } else {
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+17]);
                     }
                     break;
                 case 7:
                     if (0 <= i && i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     } else if (8 <= i && i <= 15){
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     } else if (56 <= i && i <= 63)
                     {
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
                     } else if (48 <= i && i <= 55)
                     {
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i+6]);
                     } else {
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+15]);
                     }
                     break;
                 default:
 
                     if (0 <= i && i <= 7)
                     {
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+6]);
                     } else if (8 <= i && i <= 15){
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-6]);
                     } else if (56 <= i && i <= 63)
                     {
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
                     } else if (48 <= i && i <= 55)
                     {
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-6]);
-                        possibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
                     } else {
-                        possibleMoves.Add(BPs[i+10]);
-                        possibleMoves.Add(BPs[i+17]);
-                        possibleMoves.Add(BPs[i+15]);
-                        possibleMoves.Add(BPs[i+6]);
-                        possibleMoves.Add(BPs[i-10]);
-                        possibleMoves.Add(BPs[i-17]);
-                        possibleMoves.Add(BPs[i-15]);
-                        possibleMoves.Add(BPs[i-6]);
+                        TpossibleMoves.Add(BPs[i+10]);
+                        TpossibleMoves.Add(BPs[i+17]);
+                        TpossibleMoves.Add(BPs[i+15]);
+                        TpossibleMoves.Add(BPs[i+6]);
+                        TpossibleMoves.Add(BPs[i-10]);
+                        TpossibleMoves.Add(BPs[i-17]);
+                        TpossibleMoves.Add(BPs[i-15]);
+                        TpossibleMoves.Add(BPs[i-6]);
                     }
                     break;
                 
@@ -481,49 +483,49 @@ public class Moves : MonoBehaviour
             //double moves
             if (i % 8 == 1 && a.Contains("W") && !BlackLocations.Contains(i+1) && !WhiteLocations.Contains(i+1))
             {
-                possibleMoves.Add(BPs[i+1]);
+                TpossibleMoves.Add(BPs[i+1]);
                 if (!BlackLocations.Contains(i+2) && !WhiteLocations.Contains(i+2))
                 {
-                    possibleMoves.Add(BPs[i+2]);
+                    TpossibleMoves.Add(BPs[i+2]);
                 }
                 
             }
             else if (i % 8 == 6 && a.Contains("B") && !BlackLocations.Contains(i-1) && !WhiteLocations.Contains(i-1))
             {
-                possibleMoves.Add(BPs[i-1]);
+                TpossibleMoves.Add(BPs[i-1]);
                 if (!BlackLocations.Contains(i-2) && !WhiteLocations.Contains(i-2))
                 {
-                    possibleMoves.Add(BPs[i-2]);
+                    TpossibleMoves.Add(BPs[i-2]);
                 }
             }
 
             //simlpe moves
             if(i % 8 != 1 && a.Contains("W") && i % 8 != 7 && !BlackLocations.Contains(i+1) && !WhiteLocations.Contains(i+1))
             {
-                possibleMoves.Add(BPs[i+1]);
+                TpossibleMoves.Add(BPs[i+1]);
         
             }
             if(i % 8 != 6 && a.Contains("B") && i % 8 != 0 && !BlackLocations.Contains(i-1) && !WhiteLocations.Contains(i-1))
             {
-                possibleMoves.Add(BPs[i-1]);        
+                TpossibleMoves.Add(BPs[i-1]);        
             }
 
             //taking enemy pieces
             if (BlackLocations.Contains(i - 7) && a.Contains("W")) //enemy left 4 white
             {
-                possibleMoves.Add(BPs[i - 7]);
+                TpossibleMoves.Add(BPs[i - 7]);
             }
             if (BlackLocations.Contains(i + 9) && a.Contains("W")) //enemy right 4 white
             {
-                possibleMoves.Add(BPs[i + 9]);
+                TpossibleMoves.Add(BPs[i + 9]);
             }
             if (WhiteLocations.Contains(i - 9) && a.Contains("B")) //enemy left 4 black
             {
-                possibleMoves.Add(BPs[i - 9]);
+                TpossibleMoves.Add(BPs[i - 9]);
             }
             if (WhiteLocations.Contains(i + 7) && a.Contains("B")) //enemy right 4 black
             {
-                possibleMoves.Add(BPs[i + 7]);
+                TpossibleMoves.Add(BPs[i + 7]);
             }
 
             //in
@@ -568,7 +570,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -582,7 +584,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -596,7 +598,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -610,7 +612,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -627,7 +629,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -641,7 +643,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -655,7 +657,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -669,7 +671,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -683,7 +685,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -697,7 +699,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -711,7 +713,7 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
@@ -725,16 +727,16 @@ public class Moves : MonoBehaviour
                 {
                     break;
                 }
-                possibleMoves.Add(BPs[j]);
+                TpossibleMoves.Add(BPs[j]);
                 if (BlackLocations.Contains(j) || WhiteLocations.Contains(j))
                 {
                     break;
                 }
             }
         }
-        possibleMoves = RemoveDuplicates(possibleMoves);
+        TpossibleMoves = RemoveDuplicates(TpossibleMoves);
         Remove:
-            foreach (Transform m in possibleMoves)
+            foreach (Transform m in TpossibleMoves)
             {
                 if (!a.Contains("P") && !a.Contains("R") && (a != "BB" && a != "WB") && !a.Contains("Q"))
                 {
@@ -749,9 +751,28 @@ public class Moves : MonoBehaviour
                         goto Remove;
                     }
                 }
-
+                if (a.Contains("K"))
+                {
+                    if (GameObject.Find("Canvas").GetComponent<GameController>().turns % 2 == 1)
+                    {
+                        if (BlackTakes.Contains(m))
+                        {
+                            possibleMoves.Remove(m);
+                            goto Remove;
+                        }
+                    }
+                    else
+                    {
+                        if (WhiteTakes.Contains(m))
+                        {
+                            possibleMoves.Remove(m);
+                            goto Remove;
+                        }
+                    }
+                }
             }
         possibleMoves.Add(BPs[i]);
+        possibleMoves = RemoveDuplicates(possibleMoves);
     }
     void GetTakes() 
     {
@@ -760,12 +781,12 @@ public class Moves : MonoBehaviour
         foreach (GameObject OB in GameObject.FindGameObjectsWithTag("Black"))
         {
             int i = BPs.IndexOf(OB.GetComponent<Moves>().GetClosest(BPs));
-            if (!OB.name.Contains("P"))
+            if (!OB.name.Contains("P") && !OB.name.Contains("K"))
             {
                 OB.GetComponent<Moves>().GenerateMoves();
                 BlackTakes.AddRange(OB.GetComponent<Moves>().possibleMoves);
             }
-            else
+            else if(OB.name.Contains("P"))
             {
                 if (i >= 8)
                 {
@@ -776,16 +797,21 @@ public class Moves : MonoBehaviour
                     BlackTakes.Add(BPs[i + 7]);
                 }
             }
+            else
+            {
+                OB.GetComponent<Moves>().GenerateMoves();
+                BlackTakes.AddRange(OB.GetComponent<Moves>().TpossibleMoves);
+            }
         }
         foreach (GameObject OB in GameObject.FindGameObjectsWithTag("White"))
         {
             int i = BPs.IndexOf(OB.GetComponent<Moves>().GetClosest(BPs));
-            if (!OB.name.Contains("P"))
+            if (!OB.name.Contains("P") && !OB.name.Contains("K"))
             {
                 OB.GetComponent<Moves>().GenerateMoves();
                 WhiteTakes.AddRange(OB.GetComponent<Moves>().possibleMoves);
             }
-            else
+            else if (OB.name.Contains("P"))
             {
                 if (i >= 8)
                 {
@@ -796,8 +822,15 @@ public class Moves : MonoBehaviour
                     WhiteTakes.Add(BPs[i + 9]);
                 }
             }
+            else
+            {
+                OB.GetComponent<Moves>().GenerateMoves();
+                WhiteTakes.AddRange(OB.GetComponent<Moves>().TpossibleMoves);
+            }
         
         }
+        WhiteTakes = RemoveDuplicates(WhiteTakes);
+        BlackTakes = RemoveDuplicates(BlackTakes);
     }
     List<T> RemoveDuplicates<T>(List<T> l)
     {

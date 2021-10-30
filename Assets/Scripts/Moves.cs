@@ -53,7 +53,7 @@ public class Moves : MonoBehaviour
         }
         transform.position = GetClosest(possibleMoves).position - new Vector3(0,0,1);
         gameObject.GetComponent<SpriteRenderer>().size = new Vector2(2,2);
-        if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] - 16)
+        if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] - 16 && gameObject.name.Contains("K"))
         {
             GameObject leftR =
                    GameObject.FindGameObjectsWithTag(gameObject.tag)[0].name == "WR" ?
@@ -62,7 +62,7 @@ public class Moves : MonoBehaviour
             leftR.transform.position += new Vector3(6, 0, 0);
             everyMove[leftR].Add(BPs.IndexOf(leftR.GetComponent<Moves>().GetClosest(BPs)));
         }
-        else if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] + 16)
+        else if (BPs.IndexOf(GetClosest(BPs)) == Moved[Moved.Count - 1] + 16 && gameObject.name.Contains("K"))
         {
             GameObject rightR =
                     GameObject.FindGameObjectsWithTag(gameObject.tag)[GameObject.FindGameObjectsWithTag(gameObject.tag).Length - 2].name == "WR" ?

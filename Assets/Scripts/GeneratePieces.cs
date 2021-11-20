@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeneratePieces : MonoBehaviour
 {
     // Start is called before the first frame update
     private List<int> p = new List<int>(){4,3,2,1,0,2,3,4};
     private List<string> n = new List<string>(){"BK","BQ","BB","BN","BR","BP","WK","WQ","WB","WN","WR","WP"};
-    public List<GameObject> Keys = new List<GameObject>();
     public Dictionary<GameObject, List<int>> allMoves = new Dictionary<GameObject, List<int>>();
+    public List<GameObject> Temp = new List<GameObject>();
     void Start()
     {
         for (int i = 0; i < 8; i++)
@@ -52,8 +54,8 @@ public class GeneratePieces : MonoBehaviour
                     );
                     P.transform.position = spawn;
                     P.AddComponent<BoxCollider2D>();
+                    
                     P.AddComponent<Moves>();
-                    Keys.Add(P);
                     allMoves.Add(P, new List<int>());
                     if (P.name.Contains("W"))
                     {
@@ -81,5 +83,14 @@ public class GeneratePieces : MonoBehaviour
             }
         }
         return T;
+    }
+
+    public void Promote(GameObject P)
+    {
+        foreach (var T in Temp)
+            {
+                T.GetComponent<Button>().onClick.AddListener();
+                Instantiate(T, transform.parent.GetChild(4).GetChild(2));
+            }
     }
 }

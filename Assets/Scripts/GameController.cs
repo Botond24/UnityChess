@@ -3,15 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /*
-megcsinaljuk pygameben DE DE csak ha elobb c++ ban (meg brainfckban is egybol), opengl nélkül
-Done:E
-
-jo ohm guys amig Boti meghackeli a githubot es megprobalja feltolteni a cuccot osszeszedhetnenk h mi kell meg a gamebe
-
-Todo: hi:)
-- Enpassant
-- Checkmate system
-°O°
+Todo: enpassant
+Todo: Check fix
 */
 public class GameController : MonoBehaviour
 {
@@ -87,23 +80,23 @@ public class GameController : MonoBehaviour
         SS.SetActive(false);
         IG.SetActive(true);
     }
-    public void NewDestroyed(Sprite S)
+    public void NewDestroyed(Sprite s)
     {
-        GameObject Img = new GameObject(S.name);
-        Image image = Img.AddComponent<Image>();
-        RectTransform RT = Img.GetComponent<RectTransform>();
-        RT.SetParent(IG.transform);
-        RT.sizeDelta = new Vector2(62.5f, 62.5f);
-        RT.localScale = new Vector2(1, 1);
-        if (System.Convert.ToInt32(S.name) <= 5)
+        var img = new GameObject(s.name);
+        var image = img.AddComponent<Image>();
+        var rt = img.GetComponent<RectTransform>();
+        rt.SetParent(IG.transform);
+        rt.sizeDelta = new Vector2(62.5f, 62.5f);
+        rt.localScale = new Vector2(1, 1);
+        if (System.Convert.ToInt32(s.name) <= 5)
         {
             if (WD <= 7)
             {
-                RT.localPosition += new Vector3(-368.75f, -218.75f + (62.5f * (WD % 8)), 0);
+                rt.localPosition += new Vector3(-368.75f, -218.75f + (62.5f * (WD % 8)), 0);
             }
             else
             {
-                RT.localPosition += new Vector3(-306.25f, -218.75f + (62.5f * (WD % 8)), 0);
+                rt.localPosition += new Vector3(-306.25f, -218.75f + (62.5f * (WD % 8)), 0);
             }
 
             WD++;
@@ -112,14 +105,14 @@ public class GameController : MonoBehaviour
         {
             if (WD <= 7)
             {
-                RT.localPosition += new Vector3(368.75f, -218.75f + (62.5f * (BD % 8)), 0);
+                rt.localPosition += new Vector3(368.75f, -218.75f + (62.5f * (BD % 8)), 0);
             }
             else
             {
-                RT.localPosition += new Vector3(306.25f, -218.75f + (62.5f * (BD % 8)), 0);
+                rt.localPosition += new Vector3(306.25f, -218.75f + (62.5f * (BD % 8)), 0);
             }
             BD++;
         }
-        image.sprite = S;
+        image.sprite = s;
     }
 }
